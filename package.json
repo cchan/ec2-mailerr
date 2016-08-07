@@ -4,7 +4,7 @@
   "description": "mail error messages",
   "main": "mailerr.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "snyk test"
   },
   "author": "Clive Chan (cc@clive.io)",
   "license": "MIT",
@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/cchan/ec2-mailerr/issues"
   },
-  "homepage": "https://github.com/cchan/ec2-mailerr#readme"
+  "homepage": "https://github.com/cchan/ec2-mailerr#readme",
+  "devDependencies": {
+    "snyk": "^1.18.0"
+  }
 }
