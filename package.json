@@ -2,14 +2,22 @@
   "name": "mailerr",
   "version": "1.0.0",
   "description": "mail error messages",
-  "main": "index.js",
+  "main": "mailerr.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Clive Chan (cc@clive.io)",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "body-parser": "^1.15.2",
     "express": "^4.14.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cchan/ec2-mailerr.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cchan/ec2-mailerr/issues"
+  },
+  "homepage": "https://github.com/cchan/ec2-mailerr#readme"
 }
