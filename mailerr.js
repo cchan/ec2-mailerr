@@ -22,7 +22,7 @@ app.post('/mailerr', function (hook_req, hook_res) {
   mg.sendText('mailbot@clive.io',
               'cc@clive.io',
               'Mailerr ' + hook_req.body.event + ": " + hook_req.body.recipient,
-              'https://mailgun.com/app/logs/clive.io?event=failed-permanent&event=failed-temporary&event=complained&event=rejected\send_req\n' + JSON.stringify(hook_req.body),
+              'https://mailgun.com/app/logs/clive.io?event=failed-permanent&event=failed-temporary&event=complained&event=rejected\r\n\r\n' + JSON.stringify(hook_req.body, null, 2),
               'clive.io',
               {},
               function(err){
