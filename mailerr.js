@@ -6,6 +6,7 @@ var helmet = require('helmet');
 var multipart = require('connect-multiparty');
 var https = require('https');
 var qs = require('querystring');
+var crypto = require('crypto');
 
 app.use(helmet());
 app.use(multipart());
