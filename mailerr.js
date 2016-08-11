@@ -1,4 +1,4 @@
-var secrets = require('./secrets.js');
+var apikey = require('./secrets.js');
 var app = require('express')();
 var exec = require('child_process').exec;
 var PORT = 55923;
@@ -12,21 +12,27 @@ app.use(multipart());
 
 // http basic auth http://stackoverflow.com/a/3905553/1181387
 // http request error handling http://stackoverflow.com/a/19332541/1181387
-app.post(secrets.path, function (hook_req, hook_res) {
+app.post('/mailerr', function (hook_req, hook_res) {
+  var hmac = crypto.createHmac('sha256', apikey);
+  hmac.update(hook_req.timestamp + hook_req.token);
+  if(hook_req.signature != hmac.digest('hex')){
+    hook_res.send(401, 'Unauthorized');
+    return;
+  }
+  
   var send_req = https.request({
     hostname: 'api.mailgun.net',
     path: '/v3/clive.io/messages',
     method: 'POST',
     headers:{
-      'Authorization': 'Basic ' + new Buffer('api:' + secrets.apikey).toString('base64')
+      'Authorization': 'Basic ' + new Buffer('api:' + apikey).toString('base64')
     }
   }, function(send_res){
     if(('' + send_req.statusCode).match(/^2\d\d$/)){
       console.log('sent');
       hook_res.send('sent');
     }else{
-      console.error(send_req.statusCode);
-      console.error(send_res);
+      console.error(send_req.statusCod + ' ' + send_res.statusMessage);
       hook_res.send(500, 'error');
     }
   });
