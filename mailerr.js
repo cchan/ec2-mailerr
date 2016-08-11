@@ -29,12 +29,12 @@ app.post('/mailerr', function (hook_req, hook_res) {
       'Authorization': 'Basic ' + new Buffer('api:' + apikey).toString('base64')
     }
   }, function(send_res){
-    if(('' + send_req.statusCode).match(/^2\d\d$/)){
+    if(('' + send_res.statusCode).match(/^2\d\d$/)){
       console.log('sent');
       hook_res.send('sent');
     }else{
-      console.error(send_req.statusCod + ' ' + send_res.statusMessage);
-      hook_res.send(500, 'error');
+      console.error(send_res.statusCode + ' ' + send_res.statusMessage);
+      hook_res.status(500).send('error');
     }
   });
 
@@ -47,12 +47,12 @@ app.post('/mailerr', function (hook_req, hook_res) {
 
   send_req.on('error', function(e){
     console.error(e.message);
-    hook_res.send(500, 'error');
+    hook_res.status(500).send('error');
   });
 
   send_req.on('timeout', function(){
     console.log('timeout');
-    hook_res.send(500, 'timeout');
+    hook_res.status(500).send('timeout');
     send_req.abort();
   });
   
