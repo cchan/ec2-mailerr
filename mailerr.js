@@ -15,8 +15,8 @@ app.use(multipart());
 // http request error handling http://stackoverflow.com/a/19332541/1181387
 app.post('/mailerr', function (hook_req, hook_res) {
   var hmac = crypto.createHmac('sha256', apikey);
-  hmac.update(hook_req.timestamp + hook_req.token);
-  if(hook_req.signature != hmac.digest('hex')){
+  hmac.update('' + hook_req.body.timestamp + hook_req.body.token);
+  if(hook_req.body.signature != hmac.digest('hex')){
     hook_res.send(401, 'Unauthorized');
     return;
   }
@@ -41,7 +41,7 @@ app.post('/mailerr', function (hook_req, hook_res) {
   send_req.write(qs.stringify({
     from: 'mailbot@clive.io',
     to: 'cc@clive.io',
-    subject: 'Mailerr ' + hook_req.body['event'] + ": " + hook_req.body['recipient'],
+    subject: 'Mailerr ' + hook_req.body.event + ": " + hook_req.body.recipient,
     text: 'https://mailgun.com/app/logs/clive.io?event=failed-permanent&event=failed-temporary&event=complained&event=rejected\send_req\n' + JSON.stringify(hook_req.body)
   }));
 
