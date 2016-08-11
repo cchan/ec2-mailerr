@@ -1,22 +1,28 @@
 var secrets = require('./secrets.js');
 var app = require('express')();
-var bodyParser = require('body-parser');
 var exec = require('child_process').exec;
 var PORT = 55923;
 var helmet = require('helmet');
+var multipart = require('connect-multiparty');
+var http = require('http');
 
-app.use(bodyParser.urlencoded());
 app.use(helmet());
+app.use(multipart());
 
 app.post(secrets.path, function (req, res) {
-  console.log(req.body);
-  exec("curl -s " + secrets.mailapi
+  var event = req.body['event'].replace(/\W/g, '');
+  var recip = req.body['recipient'].replace(/[^0-9a-zA-Z@\./g, '');
+  var client = http.createClient(80, secrets.mailapi);
+  var request = client.request('POST', secrets.apiroute, {
+    'Host': secrets.mailapi,
+    'Authorization': 'Basic ' + new Buffer(secrets.apiuser + ':' + secrets.apikey).toString('base64')
+  });
+
   + " -F from='"            + secrets.mailbot + "'"
   + " -F to='"              + secrets.recipients + "'"
-  + " -F subject='Mailerr " + secrets.recipients + "'"
-  + " -F text='"            + JSON.stringify(req.body) + "\r\n" + secrets.response + "'",
+  + " -F subject='Mailerr " + event + ": " + recip + "'"
+  + " -F text='"            + event + ": " + recip + "\r\n" + secrets.response + "'",
   function(error, stdout, stderr){
-    console.log('message: ' + JSON.stringify(req.body));
     console.log('stdout: ' + stdout);
     console.log('stderr: ' + stderr);
     if (error !== null) {
