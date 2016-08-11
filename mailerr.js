@@ -1,9 +1,10 @@
+var apikey = require('./secrets.js');
 var app = require('express')();
 var PORT = 55923;
 var helmet = require('helmet');
 var multipart = require('connect-multiparty');
 var crypto = require('crypto');
-var mg = new (require('mailgun').Mailgun)(require('./secrets.js'));
+var mg = new (require('mailgun').Mailgun)(apikey);
 
 app.use(helmet());
 app.use(multipart());
