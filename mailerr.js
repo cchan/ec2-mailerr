@@ -1,12 +1,9 @@
-var apikey = require('./secrets.js');
 var app = require('express')();
-var exec = require('child_process').exec;
 var PORT = 55923;
 var helmet = require('helmet');
 var multipart = require('connect-multiparty');
-var https = require('https');
-var qs = require('querystring');
 var crypto = require('crypto');
+var mg = new (require('mailgun').Mailgun)(require('./secrets.js'));
 
 app.use(helmet());
 app.use(multipart());
@@ -21,43 +18,21 @@ app.post('/mailerr', function (hook_req, hook_res) {
     return;
   }
   
-  var send_req = https.request({
-    hostname: 'api.mailgun.net',
-    path: '/v3/clive.io/messages',
-    method: 'POST',
-    headers:{
-      'Authorization': 'Basic ' + new Buffer('api:' + apikey).toString('base64')
-    }
-  }, function(send_res){
-    if(('' + send_res.statusCode).match(/^2\d\d$/)){
-      console.log('sent');
-      hook_res.send('sent');
-    }else{
-      console.error(send_res.statusCode + ' ' + send_res.statusMessage);
-      hook_res.status(500).send('error');
-    }
-  });
-
-  send_req.write(qs.stringify({
-    from: 'mailbot@clive.io',
-    to: 'cc@clive.io',
-    subject: 'Mailerr ' + hook_req.body.event + ": " + hook_req.body.recipient,
-    text: 'https://mailgun.com/app/logs/clive.io?event=failed-permanent&event=failed-temporary&event=complained&event=rejected\send_req\n' + JSON.stringify(hook_req.body)
-  }));
-
-  send_req.on('error', function(e){
-    console.error(e.message);
-    hook_res.status(500).send('error');
-  });
-
-  send_req.on('timeout', function(){
-    console.log('timeout');
-    hook_res.status(500).send('timeout');
-    send_req.abort();
-  });
-  
-  send_req.setTimeout(5000);
-  send_req.end();
+  mg.sendText('mailbot@clive.io',
+              'cc@clive.io',
+              'Mailerr ' + hook_req.body.event + ": " + hook_req.body.recipient,
+              'https://mailgun.com/app/logs/clive.io?event=failed-permanent&event=failed-temporary&event=complained&event=rejected\send_req\n' + JSON.stringify(hook_req.body),
+              'clive.io',
+              {},
+              function(err){
+                if(err){
+                  console.err('API response code '+err);
+                  hook_res.status(500).send('error');
+                }else{
+                  console.log('sent');
+                  hook_res.send('sent');
+                }
+              });
 });
 
 app.listen(PORT, 'localhost', function(){
