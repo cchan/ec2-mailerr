@@ -5,7 +5,7 @@ var exec = require('child_process').exec;
 var PORT = 55923;
 var helmet = require('helmet');
 
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
 app.use(helmet());
 
 app.post(secrets.path, function (req, res) {
