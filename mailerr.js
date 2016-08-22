@@ -1,6 +1,6 @@
 var apikey = require('./secrets.js');
 var app = require('express')();
-var PORT = 55923;
+var PORT = process.env.PORT;
 var helmet = require('helmet');
 var multipart = require('connect-multiparty');
 var crypto = require('crypto');

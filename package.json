@@ -4,6 +4,7 @@
   "description": "mail error messages",
   "main": "mailerr.js",
   "scripts": {
+    "start": "node mailerr.js",
     "test": "snyk test"
   },
   "author": "Clive Chan (cc@clive.io)",
