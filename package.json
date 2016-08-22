@@ -23,6 +23,6 @@
   },
   "homepage": "https://github.com/cchan/ec2-mailerr#readme",
   "devDependencies": {
-    "snyk": "^1.18.0"
+    "snyk": "^1.18.1"
   }
 }
