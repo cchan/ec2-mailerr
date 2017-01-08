@@ -9,6 +9,10 @@ var mg = new (require('mailgun').Mailgun)(apikey);
 app.use(helmet());
 app.use(multipart());
 
+app.post('/uptime', function(req, res) {
+  res.sendStatus(200);
+});
+
 // http basic auth http://stackoverflow.com/a/3905553/1181387
 // http request error handling http://stackoverflow.com/a/19332541/1181387
 app.post('/mailerr', function (hook_req, hook_res) {
