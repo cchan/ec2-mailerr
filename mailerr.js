@@ -9,7 +9,7 @@ var mg = new (require('mailgun').Mailgun)(apikey);
 app.use(helmet());
 app.use(multipart());
 
-app.post('/uptime', function(req, res) {
+app.get('/uptime', function(req, res) {
   res.sendStatus(200);
 });
 
