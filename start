@@ -1,2 +1,2 @@
 #!/bin/sh
-router create mailerr.clive.io
+router create --domain mailerr.clive.io
